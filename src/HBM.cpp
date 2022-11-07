@@ -12,13 +12,27 @@ string HBM::standard_name = "HBM";
 string HBM::level_str [int(Level::MAX)] = {"Ch", "Ra", "Bg", "Ba", "Ro", "Co"};
 
 map<string, enum HBM::Org> HBM::org_map = {
-    {"HBM_1Gb", HBM::Org::HBM_1Gb},
-    {"HBM_2Gb", HBM::Org::HBM_2Gb},
-    {"HBM_4Gb", HBM::Org::HBM_4Gb},
+    {"HBM_1Gb_Legacy", HBM::Org::HBM_1Gb_Legacy},
+    {"HBM_2Gb_Legacy", HBM::Org::HBM_2Gb_Legacy},
+    {"HBM_4Gb_Legacy", HBM::Org::HBM_4Gb_Legacy},
+    {"HBM_2Gb_PC", HBM::Org::HBM_2Gb_PC},
+    {"HBM_4Gb_PC", HBM::Org::HBM_4Gb_PC},
+    {"HBM_6Gb_PC", HBM::Org::HBM_6Gb_PC},
+    {"HBM_8Gb_PC", HBM::Org::HBM_8Gb_PC},
+    {"HBM_8Gb_8High_PC", HBM::Org::HBM_8Gb_8High_PC},
+    {"HBM_8Gb_12High_PC", HBM::Org::HBM_8Gb_12High_PC},
+    {"HBM_12Gb_8High_PC", HBM::Org::HBM_12Gb_8High_PC},
+    {"HBM_12Gb_12High_PC", HBM::Org::HBM_12Gb_12High_PC},
+    {"HBM_16Gb_8High_PC", HBM::Org::HBM_16Gb_8High_PC},
+    {"HBM_16Gb_12High_PC", HBM::Org::HBM_16Gb_12High_PC}    
 };
 
 map<string, enum HBM::Speed> HBM::speed_map = {
     {"HBM_1Gbps", HBM::Speed::HBM_1Gbps},
+    {"HBM_1.6Gbps", HBM::Speed::HBM_1_6Gbps},
+    {"HBM_2Gbps", HBM::Speed::HBM_2Gbps},
+    {"HBM_2.4Gbps", HBM::Speed::HBM_2_4Gbps},
+    {"HBM_3.2Gbps", HBM::Speed::HBM_3_2Gbps},
 };
 
 HBM::HBM(Org org, Speed speed)
@@ -51,13 +65,27 @@ void HBM::set_rank_number(int rank) {
 void HBM::init_speed()
 {
     const static int RFC_TABLE[int(Speed::MAX)][int(Org::MAX)] = {
-        {55, 80, 130}
+        {55, 80, 130, 80, 130, 175, 175, 175, 175, 225, 225, 225, 225},
+        {35, 50, 82,  50, 82,  110, 110, 110, 110, 141, 141, 141, 141},
+        {28, 40, 65,  40, 65,  88,  88,  88,  88,  113, 113, 113, 113},
+        {23, 34, 55,  34, 55,  73,  73,  73,  73,  94,  94,  94,  94},
+        {20, 29, 47,  29, 47,  63,  63,  63,  63,  81,  81,  81,  81},
+        {18, 25, 41,  25, 41,  55,  55,  55,  55,  71,  71,  71,  71}
     };
-    const static int REFI1B_TABLE[int(Speed::MAX)][int(Org::MAX)] = {
-        {64, 128, 256}
+    const static int REFISB_TABLE[int(Speed::MAX)][int(Org::MAX)] = {
+        {244, 244, 122, 244, 122, 122, 122, 61, 41, 61, 41, 61, 41},
+        {153, 153, 77,  153, 77,  77,  77,  39, 26, 39, 26, 39, 26},
+        {122, 122, 61,  122, 61,  61,  61,  31, 21, 31, 21, 31, 21},
+        {102, 102, 51,  102, 51,  51,  51,  26, 17, 26, 17, 26, 17},
+        {88,  88,  44,  88,  44,  44,  44,  22, 15, 22, 15, 22, 15},
+        {77,  77,  39,  77,  39,  39,  39,  20, 13, 20, 13, 20, 13}
     };
     const static int XS_TABLE[int(Speed::MAX)][int(Org::MAX)] = {
-        {60, 85, 135}
+        {60, 85, 135, 85, 135, 180, 180, 180, 180, 230, 230, 230, 230},
+        {40, 55, 87,  55, 87,  115, 115, 115, 115, 146, 146, 146, 146},
+        {33, 45, 70,  45, 70,  93,  93,  93,  93,  118, 118, 118, 118},
+        {28, 39, 60,  39, 60,  78,  78,  78,  78,  99,  99,  99,  99},
+        {25, 34, 52,  34, 52,  68,  68,  68,  68,  86,  86,  86,  86}
     };
 
     int speed = 0, density = 0;
@@ -72,7 +100,7 @@ void HBM::init_speed()
         default: assert(false);
     }
     speed_entry.nRFC = RFC_TABLE[speed][density];
-    speed_entry.nREFI1B = REFI1B_TABLE[speed][density];
+    speed_entry.nREFISB = REFISB_TABLE[speed][density];
     speed_entry.nXS = XS_TABLE[speed][density];
 }
 
