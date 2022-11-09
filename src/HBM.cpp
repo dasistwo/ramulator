@@ -40,6 +40,7 @@ HBM::HBM(Org org, Speed speed)
     speed_entry(speed_table[int(speed)]),
     read_latency(speed_entry.nCL + speed_entry.nBL)
 {
+    organization = org;
     init_speed();
     init_prereq();
     init_rowhit(); // SAUGATA: added row hit function
@@ -53,11 +54,12 @@ HBM::HBM(const string& org_str, const string& speed_str) :
 {
 }
 
-void HBM::set_channel_number(int channel) {
+void HBM::set_channel_number(int& channel) {
+  if (organization > HBM::Org::HBM_4Gb_Legacy) channel *= 2;
   org_entry.count[int(Level::Channel)] = channel;
 }
 
-void HBM::set_rank_number(int rank) {
+void HBM::set_rank_number(int& rank) {
   org_entry.count[int(Level::Rank)] = rank;
 }
 
@@ -65,42 +67,60 @@ void HBM::set_rank_number(int rank) {
 void HBM::init_speed()
 {
     const static int RFC_TABLE[int(Speed::MAX)][int(Org::MAX)] = {
-        {55, 80, 130, 80, 130, 175, 175, 175, 175, 225, 225, 225, 225},
-        {35, 50, 82,  50, 82,  110, 110, 110, 110, 141, 141, 141, 141},
-        {28, 40, 65,  40, 65,  88,  88,  88,  88,  113, 113, 113, 113},
-        {23, 34, 55,  34, 55,  73,  73,  73,  73,  94,  94,  94,  94},
-        {20, 29, 47,  29, 47,  63,  63,  63,  63,  81,  81,  81,  81},
-        {18, 25, 41,  25, 41,  55,  55,  55,  55,  71,  71,  71,  71}
+        {55, 80, 130, 175, 225},
+        {35, 50, 82,  110, 141},
+        {28, 40, 65,  88,  113},
+        {23, 34, 55,  73,  94},
+        {20, 29, 47,  63,  81},
+        {18, 25, 41,  55,  71}
     };
-    const static int REFISB_TABLE[int(Speed::MAX)][int(Org::MAX)] = {
-        {244, 244, 122, 244, 122, 122, 122, 61, 41, 61, 41, 61, 41},
-        {153, 153, 77,  153, 77,  77,  77,  39, 26, 39, 26, 39, 26},
-        {122, 122, 61,  122, 61,  61,  61,  31, 21, 31, 21, 31, 21},
-        {102, 102, 51,  102, 51,  51,  51,  26, 17, 26, 17, 26, 17},
-        {88,  88,  44,  88,  44,  44,  44,  22, 15, 22, 15, 22, 15},
-        {77,  77,  39,  77,  39,  39,  39,  20, 13, 20, 13, 20, 13}
+    const static int REFISB_TABLE[int(Speed::MAX)][4] = {
+        {244, 122, 61, 41},
+        {153, 77,  39, 26},
+        {122, 61,  31, 21},
+        {102, 51,  26, 17},
+        {88,  44,  22, 15},
+        {77,  39,  20, 13}
     };
     const static int XS_TABLE[int(Speed::MAX)][int(Org::MAX)] = {
-        {60, 85, 135, 85, 135, 180, 180, 180, 180, 230, 230, 230, 230},
-        {40, 55, 87,  55, 87,  115, 115, 115, 115, 146, 146, 146, 146},
-        {33, 45, 70,  45, 70,  93,  93,  93,  93,  118, 118, 118, 118},
-        {28, 39, 60,  39, 60,  78,  78,  78,  78,  99,  99,  99,  99},
-        {25, 34, 52,  34, 52,  68,  68,  68,  68,  86,  86,  86,  86}
+        {60, 85, 135, 180, 230},
+        {40, 55, 87,  115, 146},
+        {33, 45, 70,  93,  118},
+        {28, 39, 60,  78,  99},
+        {25, 34, 52,  68,  86},
+        {23, 30, 46,  60,  76}
     };
 
-    int speed = 0, density = 0;
+    int speed = 0, density = 0, banks = 0;
     switch (speed_entry.rate) {
         case 1000: speed = 0; break;
+        case 1600: speed = 1; break;
+        case 2000: speed = 2; break;
+        case 2400: speed = 3; break;
+        case 2800: speed = 4; break;
+        case 3200: speed = 5; break;
         default: assert(false);
     };
-    switch (org_entry.size >> 10){
-        case 1: density = 0; break;
-        case 2: density = 1; break;
-        case 4: density = 2; break;
+    banks = org_entry.count[int(Level::Bank)] * org_entry.count[int(Level::BankGroup)];
+    banks = (banks - 8) >> 3;
+    
+    density = (org_entry.size >> 10);
+    if (org_entry.dq == 64) density <<= 1;
+    
+    switch (density){
+        case 1 : density = 0; break;
+        case 2 : density = 1; break;
+        case 4 : density = 2; break;
+        case 6 :
+        case 8 : density = 3; break;
+        case 12:
+        case 16:
+        case 18:
+        case 24: density = 4; break;
         default: assert(false);
     }
     speed_entry.nRFC = RFC_TABLE[speed][density];
-    speed_entry.nREFISB = REFISB_TABLE[speed][density];
+    speed_entry.nREFISB = REFISB_TABLE[speed][banks];
     speed_entry.nXS = XS_TABLE[speed][density];
 }
 

@@ -51,11 +51,11 @@ STTMRAM::STTMRAM(const string& org_str, const string& speed_str) :
 {
 }
 
-void STTMRAM::set_channel_number(int channel) {
+void STTMRAM::set_channel_number(int& channel) {
   org_entry.count[int(Level::Channel)] = channel;
 }
 
-void STTMRAM::set_rank_number(int rank) {
+void STTMRAM::set_rank_number(int& rank) {
   org_entry.count[int(Level::Rank)] = rank;
 }
 

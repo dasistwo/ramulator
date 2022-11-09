@@ -19,6 +19,7 @@ public:
     enum class Speed;
     HBM(Org org, Speed speed);
     HBM(const string& org_str, const string& speed_str);
+    Org organization;
 
     static map<string, enum Org> org_map;
     static map<string, enum Speed> speed_map;
@@ -168,23 +169,23 @@ public:
         {2<<10, 128, {0, 0, 4,  2, 1<<14, 1<<(6+1)}},  // HBM_2Gb_Legacy
         {4<<10, 128, {0, 0, 4,  4, 1<<14, 1<<(6+1)}},  // HBM_4Gb_Legacy
 
-        {2<<10, 64,  {0, 0, 4,  2, 1<<14, 1<<(5+1)}},  // HBM_2Gb_PC
-        {4<<10, 64,  {0, 0, 4,  4, 1<<14, 1<<(5+1)}},  // HBM_4Gb_PC
-        {6<<10, 64,  {0, 0, 4,  4, 3<<13, 1<<(5+1)}},  // HBM_6Gb_PC
-        {8<<10, 64,  {0, 0, 4,  4, 1<<15, 1<<(5+1)}},  // HBM_8Gb_PC
+        {1<<10,  64, {0, 0, 4,  2, 1<<14, 1<<(5+1)}},  // HBM_2Gb_PC
+        {2<<10,  64, {0, 0, 4,  4, 1<<14, 1<<(5+1)}},  // HBM_4Gb_PC
+        {3<<10,  64, {0, 0, 4,  4, 3<<13, 1<<(5+1)}},  // HBM_6Gb_PC
+        {4<<10,  64, {0, 0, 4,  4, 1<<15, 1<<(5+1)}},  // HBM_8Gb_PC
 
-        {8<<10, 64,  {0, 0, 8,  4, 1<<14, 1<<(5+1)}},  // HBM_8Gb_8High_PC
-        {4<<10, 64,  {0, 0, 12, 4, 1<<14, 1<<(5+1)}},  // HBM_8Gb_12High_PC
+        {4<<10,  64, {0, 0, 8,  4, 1<<14, 1<<(5+1)}},  // HBM_8Gb_8High_PC
+        {6<<10,  64, {0, 0, 12, 4, 1<<14, 1<<(5+1)}},  // HBM_8Gb_12High_PC
 
-        {1<<10, 64,  {0, 0, 8,  4, 3<<13, 1<<(5+1)}},  // HBM_12Gb_8High_PC
-        {2<<10, 64,  {0, 0, 12, 4, 3<<13, 1<<(5+1)}},  // HBM_12Gb_12High_PC
-
-        {4<<10, 64,  {0, 0, 8,  4, 1<<15, 1<<(5+1)}},  // HBM_16Gb_8High_PC
-        {4<<10, 64,  {0, 0, 12, 4, 1<<15, 1<<(5+1)}},  // HBM_16Gb_12High_PC
+        {6<<10,  64, {0, 0, 8,  4, 3<<13, 1<<(5+1)}},  // HBM_12Gb_8High_PC
+        {9<<10,  64, {0, 0, 12, 4, 3<<13, 1<<(5+1)}},  // HBM_12Gb_12High_PC
+        
+        {8<<10,  64, {0, 0, 8,  4, 1<<15, 1<<(5+1)}},  // HBM_16Gb_8High_PC
+        {12<<10, 64, {0, 0, 12, 4, 1<<15, 1<<(5+1)}},  // HBM_16Gb_12High_PC
     }, org_entry;
 
-    void set_channel_number(int channel);
-    void set_rank_number(int rank);
+    void set_channel_number(int& channel);
+    void set_rank_number(int& rank);
 
     /* Speed */
     enum class Speed : int

@@ -46,11 +46,11 @@ DDR3::DDR3(const string& org_str, const string& speed_str) :
 {
 }
 
-void DDR3::set_channel_number(int channel) {
+void DDR3::set_channel_number(int& channel) {
   org_entry.count[int(Level::Channel)] = channel;
 }
 
-void DDR3::set_rank_number(int rank) {
+void DDR3::set_rank_number(int& rank) {
   org_entry.count[int(Level::Rank)] = rank;
 }
 

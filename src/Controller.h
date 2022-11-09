@@ -356,12 +356,12 @@ public:
         /*** 3. Should we schedule writes? ***/
         if (!write_mode) {
             // yes -- write queue is almost full or read queue is empty
-            if (writeq.size() > int(wr_high_watermark * writeq.max) || readq.size() == 0)
+            if (writeq.size() > (unsigned int)(wr_high_watermark * writeq.max) || readq.size() == 0)
                 write_mode = true;
         }
         else {
             // no -- write queue is almost empty and read queue is not empty
-            if (writeq.size() < int(wr_low_watermark * writeq.max) && readq.size() != 0)
+            if (writeq.size() < (unsigned int)(wr_low_watermark * writeq.max) && readq.size() != 0)
                 write_mode = false;
         }
 
@@ -370,7 +370,7 @@ public:
         // First check the actq (which has higher priority) to see if there
         // are requests available to service in this cycle
         Queue* queue = &actq;
-        typename T::Command cmd;
+        typename T::Command cmd = T::Command::MAX;
         auto req = scheduler->get_head(queue->q);
 
         bool is_valid_req = (req != queue->q.end());

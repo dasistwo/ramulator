@@ -158,8 +158,8 @@ public:
         {4<<10, 16, {0, 0, 8, 1<<15, 1<<10}},
     }, org_entry;
 
-    void set_channel_number(int channel);
-    void set_rank_number(int rank);
+    void set_channel_number(int& channel);
+    void set_rank_number(int& rank);
 
 
     /* Speed */

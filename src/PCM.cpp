@@ -51,11 +51,11 @@ PCM::PCM(const string& org_str, const string& speed_str) :
 {
 }
 
-void PCM::set_channel_number(int channel) {
+void PCM::set_channel_number(int& channel) {
   org_entry.count[int(Level::Channel)] = channel;
 }
 
-void PCM::set_rank_number(int rank) {
+void PCM::set_rank_number(int& rank) {
   org_entry.count[int(Level::Rank)] = rank;
 }
 

@@ -44,11 +44,11 @@ DDR4::DDR4(const string& org_str, const string& speed_str) :
 {
 }
 
-void DDR4::set_channel_number(int channel) {
+void DDR4::set_channel_number(int& channel) {
   org_entry.count[int(Level::Channel)] = channel;
 }
 
-void DDR4::set_rank_number(int rank) {
+void DDR4::set_rank_number(int& rank) {
   org_entry.count[int(Level::Rank)] = rank;
 }
 

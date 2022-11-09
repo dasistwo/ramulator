@@ -57,12 +57,12 @@ WideIO2::WideIO2(const string& org_str, const string& speed_str, int channels) :
 {
 }
 
-void WideIO2::set_channel_number(int channel) {
+void WideIO2::set_channel_number(int& channel) {
   assert((channel == org_entry.count[int(Level::Channel)]) && "channel number must be consistent with spec initializaiton configuration.");
   org_entry.count[int(Level::Channel)] = channel;
 }
 
-void WideIO2::set_rank_number(int rank) {
+void WideIO2::set_rank_number(int& rank) {
   assert(((rank == 1) || (rank == 2)) && "WideIO2 supports single and dual rank configurations.");
   org_entry.count[int(Level::Rank)] = rank;
 }

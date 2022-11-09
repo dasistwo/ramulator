@@ -69,11 +69,11 @@ TLDRAM::TLDRAM(const string& org_str, const string& speed_str, int segment_ratio
     this->segment_ratio = segment_ratio;
 }
 
-void TLDRAM::set_channel_number(int channel) {
+void TLDRAM::set_channel_number(int& channel) {
   org_entry.count[int(Level::Channel)] = channel;
 }
 
-void TLDRAM::set_rank_number(int rank) {
+void TLDRAM::set_rank_number(int& rank) {
   org_entry.count[int(Level::Rank)] = rank;
 }
 

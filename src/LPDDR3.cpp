@@ -44,11 +44,11 @@ LPDDR3::LPDDR3(const string& org_str, const string& speed_str) :
 {
 }
 
-void LPDDR3::set_channel_number(int channel) {
+void LPDDR3::set_channel_number(int& channel) {
   org_entry.count[int(Level::Channel)] = channel;
 }
 
-void LPDDR3::set_rank_number(int rank) {
+void LPDDR3::set_rank_number(int& rank) {
   org_entry.count[int(Level::Rank)] = rank;
 }
 
