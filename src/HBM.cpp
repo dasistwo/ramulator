@@ -40,7 +40,9 @@ HBM::HBM(Org org, Speed speed)
     speed_entry(speed_table[int(speed)]),
     read_latency(speed_entry.nCL + speed_entry.nBL)
 {
+    /* HBM2 reconfiguration */
     organization = org;
+    if (org > HBM::Org::HBM_4Gb_Legacy) channel_width >>= 1;
     init_speed();
     init_prereq();
     init_rowhit(); // SAUGATA: added row hit function
@@ -55,7 +57,7 @@ HBM::HBM(const string& org_str, const string& speed_str) :
 }
 
 void HBM::set_channel_number(int& channel) {
-  if (organization > HBM::Org::HBM_4Gb_Legacy) channel *= 2;
+  if (organization > HBM::Org::HBM_4Gb_Legacy) channel <<= 1;
   org_entry.count[int(Level::Channel)] = channel;
 }
 

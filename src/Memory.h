@@ -116,6 +116,7 @@ public:
         assert((sz[1] & (sz[1] - 1)) == 0);
         // validate size of one transaction
         int tx = (spec->prefetch_size * spec->channel_width / 8);
+        if (spec->standard_name == "HBM2" || spec->standard_name == "HBM2E") tx >>= 1;
         tx_bits = calc_log2(tx);
         assert((1<<tx_bits) == tx);
         
