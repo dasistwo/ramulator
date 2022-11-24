@@ -32,6 +32,7 @@ map<string, enum HBM::Speed> HBM::speed_map = {
     {"HBM_1.6Gbps", HBM::Speed::HBM_1_6Gbps},
     {"HBM_2Gbps", HBM::Speed::HBM_2Gbps},
     {"HBM_2.4Gbps", HBM::Speed::HBM_2_4Gbps},
+    {"HBM_2.8Gbps", HBM::Speed::HBM_2_8Gbps},
     {"HBM_3.2Gbps", HBM::Speed::HBM_3_2Gbps},
 };
 
